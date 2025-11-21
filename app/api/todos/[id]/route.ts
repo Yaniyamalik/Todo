@@ -3,10 +3,10 @@ import Todo from "@/models/todo.model";
 import { NextRequest, NextResponse } from "next/server";
 
 //update todo
-export async function PATCH(req: NextRequest, context: { params: { id: string } }) {
+export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     await connectDB();
-    const { id } = await context.params;
+    const { id } = await params;
 
     const body = await req.json();
 
@@ -29,10 +29,10 @@ export async function PATCH(req: NextRequest, context: { params: { id: string } 
 }
 
 //Delete todo
-export async function DELETE(req: NextRequest, context: { params: { id: string } }) {
+export async function DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }>}) {
   try {
     await connectDB();
-    const { id } = await context.params;
+    const { id } = await params;
 
     const deleted = await Todo.findByIdAndDelete(id);
 
@@ -56,10 +56,10 @@ export async function DELETE(req: NextRequest, context: { params: { id: string }
 }
 
 //Get todo
-export async function GET(req:NextRequest,context:{params:{id:string}}){
+export async function GET(req:NextRequest,{ params }: { params: Promise<{ id: string }>}){
   try {
     connectDB();
-  const {id }=await context.params;
+  const {id }=await params;
   const todo= await Todo.findById(id);
   return NextResponse.json({message:"Todo Fetched successfully",success:true,data:todo},{status:200})
   } catch (error) {
